@@ -1,13 +1,25 @@
 import axios from 'axios';
-import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router';
 import { baseUrl } from '../utils/constants';
+import { removeUser } from '../utils/userSlice';
 
 const NavBar = () => {
 
   const user = useSelector((store)=>store.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  const logoutHandler = async()=>{
+    try{
+      await axios.post(baseUrl+"/logout",{},{withCredentials:true});
+      dispatch(removeUser());
+      navigate("/login")
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
 
   return (
     <div className="navbar bg-[#11131c] border-b border-zinc-800/80 px-6 h-16 shadow-sm">
@@ -18,7 +30,7 @@ const NavBar = () => {
         </div>
         {user && <div className="flex items-center gap-4">
           <p className='text-[14px] text-zinc-400 font-normal hidden sm:block'>
-            Welcome back, <span className="text-zinc-200 font-medium">{user.firstName}</span>
+            Welcome back, <span className="text-zinc-200 font-medium">{user.lastName}</span>
           </p>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar hover:bg-zinc-800/50 transition-colors duration-150">
@@ -44,7 +56,7 @@ const NavBar = () => {
               </li>
               <div className="h-px bg-zinc-800/60 my-1"></div>
               <li>
-                <a className="px-3 py-2 hover:bg-red-950/40 hover:text-red-400 text-red-400/90 rounded-lg transition-colors duration-150 text-[13px]">
+                <a className="px-3 py-2 hover:bg-red-950/40 hover:text-red-400 text-red-400/90 rounded-lg transition-colors duration-150 text-[13px]" onClick={logoutHandler}>
                   Logout
                 </a>
               </li>
