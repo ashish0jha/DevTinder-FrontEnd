@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router';
 import { baseUrl } from '../utils/constants';
 import { removeUser } from '../utils/userSlice';
 import { removeFeed } from '../utils/feedSlice';
+import { removeConnections } from '../utils/connectionSlice';
 
 const NavBar = () => {
 
@@ -16,6 +17,7 @@ const NavBar = () => {
       await axios.post(baseUrl + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
       dispatch(removeFeed());
+      dispatch(removeConnections());
       navigate("/login")
     }
     catch (err) {
@@ -52,9 +54,9 @@ const NavBar = () => {
               </Link>
             </li>
             <li>
-              <a className="px-3 py-2 hover:bg-zinc-800 hover:text-zinc-100 rounded-lg transition-colors duration-150 text-[13px]">
-                Settings
-              </a>
+              <Link to={"/connections"} className="px-3 py-2 hover:bg-zinc-800 hover:text-zinc-100 rounded-lg transition-colors duration-150 text-[13px]">
+                Connections
+              </Link>
             </li>
             <div className="h-px bg-zinc-800/60 my-1"></div>
             <li>
