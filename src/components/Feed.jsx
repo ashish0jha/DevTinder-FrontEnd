@@ -14,7 +14,6 @@ const Feed = () => {
     try{
       const res = await axios.get(baseUrl+"/user/feed" , {withCredentials:true});
       const feed = res.data;
-      console.log("feed",feed)
       dispatch(addFeed(feed));
     }
     catch (err) {
@@ -28,7 +27,7 @@ const Feed = () => {
     feed && <div className="flex justify-center flex-wrap gap-10 m-5">
     {
       feed.map((user)=>{
-        return <UserCard key={user?._id}/>
+        return <UserCard key={user?._id} user={user}/>
       })
     }
       
