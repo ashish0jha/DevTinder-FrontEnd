@@ -17,12 +17,16 @@ const Feed = () => {
       dispatch(addFeed(feed));
     }
     catch (err) {
-      //TODO
+      console.error(err.message)
     }
   }
   useEffect(()=>{
     fetchFeed();
   },[])
+
+  if(!feed) return ;
+
+  if(feed.length <=0 ) return <p className="text-xl text-zinc-500 text-center py-8">You ate all Users.</p>
   return (
     feed && <div className="flex justify-center flex-wrap gap-10 m-5">
     {

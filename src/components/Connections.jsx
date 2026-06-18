@@ -8,7 +8,6 @@ import ConnectionItem from './ConnectionItem'
 const Connections = () => {
     const connection = useSelector(store => store.connection);
     const dispatch = useDispatch();
-    const [msg,setmsg] = useState();
 
     const fetchConnections = async ()=>{
         if(connection) return;
@@ -17,8 +16,7 @@ const Connections = () => {
                 withCredentials:true,
             })
             
-            dispatch(addConnections(res.data.data)); 
-            setmsg(res.data.message)
+            dispatch(addConnections(res.data.data));
         }
         catch(err){
             //TODO
@@ -36,7 +34,7 @@ const Connections = () => {
   return (
     <div className='flex flex-col justify-center items-center m-10 gap-4'>
         <h1 className='font-bold text-4xl'>Your Connections</h1>
-        <p>( {msg} )</p>
+        <p>{`You have ${connection.length} Connections`}</p>
         {
             connection.map((user) =>{
             return  <ConnectionItem connection={user} key={user._id} />

@@ -1,9 +1,26 @@
+import axios from 'axios';
 import React from 'react'
+import { baseUrl } from '../utils/constants';
+import {useState} from 'react'
+import {removeUserFromFeed} from "../utils/feedSlice"
+import { useDispatch } from 'react-redux';
 
 const UserCard = (user) => {
+  const {_id , firstName , lastName , about , age , gender , photoUrl, skills } = user.user;
 
-  const {firstName , lastName , about , age , gender , photoUrl, skills } = user.user;
+  const dispatch = useDispatch();
 
+  const sendRequest = async (status , _id) => {
+    try{
+      const res = await axios.post(baseUrl+`/request/send/${status}/${_id}`,{},{
+        withCredentials:true
+      })
+      dispatch(removeUserFromFeed(_id));
+    }
+    catch(err){
+      console.error(err.message)
+    }
+  }
   return (
     <div className="w-full max-w-100 bg-[#11131c] border border-zinc-800/80 rounded-2xl overflow-hidden shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] hover:border-zinc-700/60 transition-colors duration-200 cursor-pointer">
       
@@ -48,10 +65,14 @@ const UserCard = (user) => {
         </div>
 
         <div className="w-full mt-7 pt-5 border-t border-zinc-800/60 grid grid-cols-2 gap-3">
-          <button className="w-full py-2.5 text-[13px] font-medium text-zinc-400 hover:text-zinc-200 rounded-lg bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800/60 active:scale-[0.98] transition-all cursor-pointer">
+          <button className="w-full py-2.5 text-[13px] font-medium text-zinc-400 hover:text-zinc-200 rounded-lg bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800/60 active:scale-[0.98] transition-all cursor-pointer" onClick={()=>{
+            sendRequest("Ignored",_id)
+          }}>
             Ignore
           </button>
-          <button className="w-full py-2.5 text-[13px] font-medium text-zinc-950 bg-zinc-100 hover:bg-white rounded-lg active:scale-[0.98] transition-all cursor-pointer shadow-sm">
+          <button className="w-full py-2.5 text-[13px] font-medium text-zinc-950 bg-zinc-100 hover:bg-white rounded-lg active:scale-[0.98] transition-all cursor-pointer shadow-sm" onClick={()=>{
+            sendRequest("Interested",_id)
+          }}>
             Interested
           </button>
         </div>

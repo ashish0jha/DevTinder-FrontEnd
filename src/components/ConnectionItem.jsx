@@ -1,8 +1,24 @@
+import axios from 'axios';
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { removeConnections } from '../utils/connectionSlice';
+import { baseUrl } from '../utils/constants';
 
 const ConnectionItem = ({ connection }) => {
-    const {firstName,lastName,about,skills,photoUrl} = connection;
+    const {_id,firstName,lastName,about,skills,photoUrl} = connection;
+    const dispatch = useDispatch();
     
+    const removeConnection = async (_id)=>{
+      try{
+        
+        const res = await axios.delete(baseUrl+`/user/remove/${_id}`,
+                {withCredentials:true})
+        dispatch(removeConnections(_id));
+      }
+      catch(err) {
+        console.log(err.message)
+      }
+    }
   return (
     <div className="w-full max-w-xl flex items-center justify-between p-4 bg-[#11131c] border border-zinc-800/60 rounded-xl hover:border-zinc-700/50 transition-all duration-150 group">
       <div className="flex items-center gap-4 min-w-0">
@@ -24,9 +40,16 @@ const ConnectionItem = ({ connection }) => {
         </div>
       </div>
 
-      <button className="shrink-0 ml-4 px-3.5 py-1.5 text-[12px] font-medium text-zinc-300 bg-[#0d0e14] hover:bg-zinc-900 border border-zinc-800 rounded-lg hover:text-zinc-100 transition-colors duration-150 cursor-pointer">
-        Message
-      </button>
+      <div className="flex items-center gap-2 shrink-0 ml-4">
+        <button className="px-3.5 py-1.5 text-[12px] font-medium text-zinc-400 hover:text-red-400 bg-[#0d0e14] hover:bg-red-950/20 border border-zinc-800 rounded-lg transition-colors duration-150 cursor-pointer" onClick={()=>{
+          removeConnection(_id);
+        }}>
+          Remove
+        </button>
+        <button className="px-3.5 py-1.5 text-[12px] font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700/50 rounded-lg hover:text-zinc-100 transition-colors duration-150 cursor-pointer">
+          Message
+        </button>
+      </div>
     </div>
   )
 }

@@ -10,7 +10,6 @@ const SentRequestSection = (req) => {
         try{
             const res = await axios.delete(baseUrl+`/request/cancel/${_id}`,
                 {withCredentials:true})
-            console.log("deleted")
         }
         catch(err){
             console.error(err.message)
