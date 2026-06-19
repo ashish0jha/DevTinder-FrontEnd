@@ -129,7 +129,6 @@ const EditProfileCard = (users) => {
 
                 <label className="label text-[13px] font-medium text-zinc-300 mt-5 mb-2 block">About</label>
                 <div className="w-full">
-                <label className="label text-[13px] font-medium text-zinc-300 mb-2 block">About</label>
                 <textarea
                     value={about}
                     rows={4}

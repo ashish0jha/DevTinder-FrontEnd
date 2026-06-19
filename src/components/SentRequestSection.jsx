@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { baseUrl } from '../utils/constants';
 
 const SentRequestSection = (req) => {
-    const {_id , firstName , lastName , photoUrl,about } = req.req;
+    const _id = req.id;
+    const { firstName , lastName , photoUrl,about } = req.req;
     const [visible,setvisible] = useState(true);
 
     const cancelRequest = async (_id) =>{

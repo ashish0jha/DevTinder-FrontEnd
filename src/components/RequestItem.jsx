@@ -71,7 +71,7 @@ const RequestsPage = () => {
               <p className="text-sm text-zinc-500 text-center py-8">No pending outgoing requests.</p>
             ) : (
               mockSentRequests.map((req) => {
-                return (<SentRequestSection req={req.receiverId} key={req._id} />)
+                return (<SentRequestSection req={req.receiverId} key={req._id} id={req._id}/>)
               })
             )
           )}
