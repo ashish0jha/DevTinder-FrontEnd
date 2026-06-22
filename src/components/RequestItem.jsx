@@ -3,11 +3,17 @@ import React, { useEffect, useState } from 'react'
 import {baseUrl} from "../utils/constants"
 import SentRequestSection from './SentRequestSection';
 import ReceivingRejectingRequest from './ReceivingRejectingRequest';
+import { useDispatch, useSelector } from 'react-redux';
+import { addSentRequests } from '../utils/sentRequestSlice';
 
 const RequestsPage = () => {
   const [activeTab, setActiveTab] = useState('received');
-  const [mockReceivedRequests , setMockReceivedRequests] = useState([]);
-  const [mockSentRequests,setMockSentRequests] = useState([]);
+
+  const mockSentRequests = useSelector(store => store.sentRequest);
+
+  const [mockReceivedRequests,setMockReceivedRequests] = useState([]);
+
+  const dispatch = useDispatch();
 
   const fetchRequests= async ()=>{
         try{
@@ -15,7 +21,7 @@ const RequestsPage = () => {
           const res2 = await axios.get(baseUrl+`/user/requests/sent`,{withCredentials:true});
 
           setMockReceivedRequests(res.data);
-          setMockSentRequests(res2.data);
+          dispatch(addSentRequests(res2.data));
         }
         catch(err){
             console.error(err.message);
@@ -24,7 +30,7 @@ const RequestsPage = () => {
     useEffect(()=>{
         fetchRequests();
     },[])
-
+    if(!mockReceivedRequests || !mockSentRequests) return;
   return (
     <div className="min-h-[calc(100vh-64px)] bg-[#090a0f] text-zinc-100 antialiased py-10 px-4 sm:px-6">
       <div className="max-w-xl mx-auto">
@@ -71,7 +77,7 @@ const RequestsPage = () => {
               <p className="text-sm text-zinc-500 text-center py-8">No pending outgoing requests.</p>
             ) : (
               mockSentRequests.map((req) => {
-                return (<SentRequestSection req={req.receiverId} key={req._id} id={req._id}/>)
+                return (<SentRequestSection req={req.receiverId} key={req._id}/>)
               })
             )
           )}

@@ -1,16 +1,20 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { baseUrl } from '../utils/constants';
+import { useDispatch } from 'react-redux';
+import { removeSentRequests } from '../utils/sentRequestSlice';
 
 const SentRequestSection = (req) => {
-    const _id = req.id;
-    const { firstName , lastName , photoUrl,about } = req.req;
+    const {_id, firstName , lastName , photoUrl,about } = req.req;
     const [visible,setvisible] = useState(true);
+
+    const dispatch = useDispatch();
 
     const cancelRequest = async (_id) =>{
         try{
             const res = await axios.delete(baseUrl+`/request/cancel/${_id}`,
                 {withCredentials:true})
+            dispatch(removeSentRequests(_id))
         }
         catch(err){
             console.error(err.message)
