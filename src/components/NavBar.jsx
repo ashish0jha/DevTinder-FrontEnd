@@ -64,6 +64,11 @@ const NavBar = () => {
                 Requests
               </Link>
             </li>
+            <li>
+              <Link to={"/premium"} className="px-3 py-2 hover:bg-zinc-800 hover:text-zinc-100 rounded-lg transition-colors duration-150 text-[13px]">
+                Premium
+              </Link>
+            </li>
             <div className="h-px bg-zinc-800/60 my-1"></div>
             <li>
               <a className="px-3 py-2 hover:bg-red-950/40 hover:text-red-400 text-red-400/90 rounded-lg transition-colors duration-150 text-[13px]" onClick={logoutHandler}>
