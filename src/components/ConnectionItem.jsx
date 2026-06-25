@@ -47,7 +47,7 @@ const ConnectionItem = ({ connection }) => {
         }}>
           Remove
         </button>
-        <Link to={"/chat/"+_id}>
+        <Link to={"/chat/"+_id} state={{name:firstName+" "+lastName}}>
           <button className="px-3.5 py-1.5 text-[12px] font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700/50 rounded-lg hover:text-zinc-100 transition-colors duration-150 cursor-pointer">
             Message
           </button>
