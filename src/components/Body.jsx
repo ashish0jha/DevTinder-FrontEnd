@@ -31,11 +31,11 @@ const Body = () => {
     fetchUserData();
   },[])
   return (
-    <>
+    <div className='bg-black'>
         <NavBar/>
         <Outlet/>
         <Footer/>
-    </>
+    </div>
   )
 }
 

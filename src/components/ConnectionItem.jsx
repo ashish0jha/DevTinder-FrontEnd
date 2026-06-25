@@ -3,11 +3,12 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { removeConnections } from '../utils/connectionSlice';
 import { baseUrl } from '../utils/constants';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 const ConnectionItem = ({ connection }) => {
     const {_id,firstName,lastName,about,skills,photoUrl} = connection;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     
     const removeConnection = async (_id)=>{
       try{
@@ -21,7 +22,7 @@ const ConnectionItem = ({ connection }) => {
       }
     }
   return (
-    <div className="w-full max-w-xl flex items-center justify-between p-4 bg-[#11131c] border border-zinc-800/60 rounded-xl hover:border-zinc-700/50 transition-all duration-150 group">
+    <div onClick={() => navigate("/feedUser/" + _id, { state: { user: connection } })} className="w-full max-w-xl m-auto flex items-center justify-between p-4 bg-[#11131c] border border-zinc-800/60 rounded-xl hover:border-zinc-700/50 transition-all duration-150 group cursor-pointer">
       <div className="flex items-center gap-4 min-w-0">
         <div className="w-12 h-12 rounded-full overflow-hidden bg-zinc-900 shrink-0 border border-zinc-800">
           <img 
@@ -41,13 +42,14 @@ const ConnectionItem = ({ connection }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 shrink-0 ml-4">
-        <button className="px-3.5 py-1.5 text-[12px] font-medium text-zinc-400 hover:text-red-400 bg-[#0d0e14] hover:bg-red-950/20 border border-zinc-800 rounded-lg transition-colors duration-150 cursor-pointer" onClick={()=>{
+      <div className="flex items-center gap-2 shrink-0 ml-4 z-50">
+        <button className="px-3.5 py-1.5 text-[12px] font-medium text-zinc-400 hover:text-red-400 bg-[#0d0e14] hover:bg-red-950/20 border border-zinc-800 rounded-lg transition-colors duration-150 cursor-pointer" onClick={(e)=>{
+          e.stopPropagation();
           removeConnection(_id);
         }}>
           Remove
         </button>
-        <Link to={"/chat/"+_id} state={{name:firstName+" "+lastName}}>
+        <Link to={"/chat/"+_id} state={{name:firstName+" "+lastName}} onClick={(e)=>e.stopPropagation()}>
           <button className="px-3.5 py-1.5 text-[12px] font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700/50 rounded-lg hover:text-zinc-100 transition-colors duration-150 cursor-pointer">
             Message
           </button>

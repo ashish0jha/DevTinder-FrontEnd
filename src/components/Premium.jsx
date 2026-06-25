@@ -52,7 +52,7 @@ const Premium = () => {
           <div>
             <h2 className="text-base font-medium text-zinc-300">Silver</h2>
             <div className="mt-4 flex items-baseline">
-              <span className="text-2xl font-bold text-white">$4.99</span>
+              <span className="text-2xl font-bold text-white">₹300</span>
               <span className="ml-1 text-xs text-zinc-500">/mo</span>
             </div>
 
@@ -64,7 +64,7 @@ const Premium = () => {
           </div>
 
           <button className="mt-8 w-full py-2.5 text-xs font-medium text-black bg-white hover:bg-zinc-200 active:scale-98 rounded-lg transition-all cursor-pointer" onClick={()=>handler("Silver")}>
-            Select Silver
+            Buy Silver
           </button>
         </div>
 
@@ -77,7 +77,7 @@ const Premium = () => {
           <div>
             <h2 className="text-base font-medium text-white">Gold</h2>
             <div className="mt-4 flex items-baseline">
-              <span className="text-2xl font-bold text-white">$9.99</span>
+              <span className="text-2xl font-bold text-white">₹700</span>
               <span className="ml-1 text-xs text-zinc-500">/mo</span>
             </div>
 
@@ -90,7 +90,7 @@ const Premium = () => {
           </div>
 
           <button className="mt-8 w-full py-2.5 text-xs font-medium text-white bg-zinc-800 hover:bg-zinc-700 active:scale-98 border border-zinc-700 rounded-lg transition-all cursor-pointer" onClick={()=>handler("Gold")}>
-            Select Gold
+            Buy Gold
           </button>
         </div>
 

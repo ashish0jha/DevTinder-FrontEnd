@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addConnections } from '../utils/connectionSlice'
 import axios from 'axios'
 import ConnectionItem from './ConnectionItem'
+import { Link } from 'react-router'
 
 const Connections = () => {
     const connection = useSelector(store => store.connection);
@@ -37,7 +38,7 @@ const Connections = () => {
         <p>{`You have ${connection.length} Connections`}</p>
         {
             connection.map((user) =>{
-            return  <ConnectionItem connection={user} key={user._id} />
+            return  <ConnectionItem connection={user} key={user._id}/>
             })
         }
     </div>

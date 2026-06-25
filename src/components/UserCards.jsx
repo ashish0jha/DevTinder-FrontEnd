@@ -4,25 +4,28 @@ import { baseUrl } from '../utils/constants';
 import {useState} from 'react'
 import {removeUserFromFeed} from "../utils/feedSlice"
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
-const UserCard = (user) => {
-  const {_id , firstName , lastName , about , age , gender , photoUrl, skills } = user.user;
+const UserCard = ({user}) => {
+  const {_id , firstName , lastName , about , age , gender , photoUrl, skills } = user;
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  
   const sendRequest = async (status , _id) => {
     try{
-      const res = await axios.post(baseUrl+`/request/send/${status}/${_id}`,{},{
+        const res = await axios.post(baseUrl+`/request/send/${status}/${_id}`,{},{
         withCredentials:true
-      })
-      dispatch(removeUserFromFeed(_id));
+        })
+        dispatch(removeUserFromFeed(_id));
     }
     catch(err){
-      console.error(err.message)
+        console.error(err.message)
     }
   }
+
   return (
-    <div className="w-full max-w-100 bg-[#11131c] border border-zinc-800/80 rounded-2xl overflow-hidden shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] hover:border-zinc-700/60 transition-colors duration-200 cursor-pointer">
+    <div onClick={() => navigate("/feedUser/" + _id, { state: {user} })} className="w-full max-w-100 bg-[#11131c] border border-zinc-800/80 rounded-2xl overflow-hidden shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] hover:border-zinc-800/60 transition-colors duration-200 hover:bg-[#0d0e13] cursor-pointer shrink-0">
       
       <div className="relative aspect-video w-full bg-zinc-900">
         <img 
@@ -38,16 +41,16 @@ const UserCard = (user) => {
           </h2>
         </div>
       </div>
-      <div className="px-5 pb-6 pt-5 flex flex-col">
+      <div className="px-5 py-1 flex flex-col">
         {age && <p className="text-xl leading-relaxed text-zinc-300 font-bold">
           {age} , {gender}
         </p>}
         <p className="text-[14px] leading-relaxed text-zinc-300 font-normal">
           {about}
         </p>
-        <div className="w-full h-px bg-zinc-800/50 my-5"></div>
+        <div className="w-full h-px bg-zinc-800/50 my-2"></div>
 
-        <div className="w-full text-left mb-3">
+        <div className="w-full text-left mb-1">
           <span className="text-[11px] font-semibold text-zinc-500 tracking-wider uppercase">
             Specialties
           </span>
@@ -64,13 +67,15 @@ const UserCard = (user) => {
           ))}
         </div>
 
-        <div className="w-full mt-7 pt-5 border-t border-zinc-800/60 grid grid-cols-2 gap-3">
-          <button className="w-full py-2.5 text-[13px] font-medium text-zinc-400 hover:text-zinc-200 rounded-lg bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800/60 active:scale-[0.98] transition-all cursor-pointer" onClick={()=>{
+        <div className="w-full my-5 pt-5 border-t border-zinc-800/60 grid grid-cols-2 gap-3">
+          <button className="w-full py-2.5 text-[13px] font-medium text-zinc-400 hover:text-zinc-200 rounded-lg bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800/60 active:scale-[0.98] transition-all cursor-pointer" onClick={(e)=>{
+            e.stopPropagation();
             sendRequest("Ignored",_id)
           }}>
             Ignore
           </button>
-          <button className="w-full py-2.5 text-[13px] font-medium text-zinc-950 bg-zinc-100 hover:bg-white rounded-lg active:scale-[0.98] transition-all cursor-pointer shadow-sm" onClick={()=>{
+          <button className="w-full py-2.5 text-[13px] font-medium text-zinc-950 bg-zinc-100 hover:bg-white rounded-lg active:scale-[0.98] transition-all cursor-pointer shadow-sm" onClick={(e)=>{
+            e.stopPropagation();
             sendRequest("Interested",_id)
           }}>
             Interested
