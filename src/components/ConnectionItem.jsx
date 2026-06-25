@@ -3,6 +3,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { removeConnections } from '../utils/connectionSlice';
 import { baseUrl } from '../utils/constants';
+import { Link } from 'react-router';
 
 const ConnectionItem = ({ connection }) => {
     const {_id,firstName,lastName,about,skills,photoUrl} = connection;
@@ -46,9 +47,11 @@ const ConnectionItem = ({ connection }) => {
         }}>
           Remove
         </button>
-        <button className="px-3.5 py-1.5 text-[12px] font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700/50 rounded-lg hover:text-zinc-100 transition-colors duration-150 cursor-pointer">
-          Message
-        </button>
+        <Link to={"/chat/"+_id}>
+          <button className="px-3.5 py-1.5 text-[12px] font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700/50 rounded-lg hover:text-zinc-100 transition-colors duration-150 cursor-pointer">
+            Message
+          </button>
+        </Link>
       </div>
     </div>
   )
