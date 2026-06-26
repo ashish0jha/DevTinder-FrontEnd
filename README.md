@@ -1,157 +1,95 @@
-# 💻 DevTinder — Frontend
- 
-> A Tinder-style networking platform built for developers — swipe, connect, and collaborate with other devs based on skills and interests.
- 
-DevTinder is a full-stack social networking application that reimagines the "swipe to match" experience for the developer community. This repository contains the **React frontend** that powers the user interface, authentication flow, and real-time interactions with the backend API.
- 
-🔗 **Backend Repository:** [DevTinder Backend](https://github.com/ashish0jha/DevTinder)
- 
----
- 
-## ✨ Features
- 
-- **🔐 Authentication** — Secure signup/login with JWT-based auth stored in HTTP-only cookies
-- **🪪 Profile Management** — View and edit personal profile (bio, skills, photo, age, gender)
-- **🔄 Developer Feed** — Browse other developers' cards with skills and interests
-- **❤️ Connection Requests** — Send "Interested" or "Ignore" actions on profiles
-- **📥 Manage Requests** — View received and sent connection requests in a dedicated tab
-- **✅ Accept / Decline** — Respond to incoming connection requests
-- **👥 My Connections** — View all accepted/matched connections
-- **❌ Remove Connection** — Unmatch or remove an existing connection
-- **🚪 Logout** — Secure session termination by clearing auth cookies
-- **🎨 Responsive UI** — Built with Tailwind CSS + DaisyUI for a clean, modern dark-themed interface
----
- 
-## 🛠️ Tech Stack
- 
-| Category | Technology |
-|---|---|
-| **Library** | React |
-| **Build Tool** | Vite |
-| **Routing** | React Router |
-| **State Management** | Redux Toolkit + React-Redux |
-| **HTTP Client** | Axios |
-| **Styling** | Tailwind CSS + DaisyUI |
- 
----
- 
-## 📂 Project Structure
- 
+# DevTinder
+
+Client for DevTinder — swipe through dev profiles, send connection requests, chat once you match, and go premium if you want extra reach. Talks to the DevTinder API underneath.
+
+**Live:** http://13.236.147.238/ (served from the same EC2 instance as the backend — built and served as static files, no separate frontend deploy)
+
+**Backend repo:** https://github.com/ashish0jha/DevTinder
+
+## Stack
+
+- React + Vite
+- Redux Toolkit for state (feed, connections, requests, sent requests, user)
+- React Router for navigation
+- Tailwind CSS + DaisyUI for styling
+- Socket.io-client for live chat
+- Razorpay checkout integration for premium
+
+## Pages
+
+- **Login / Signup**
+- **Feed** — browse other dev profiles, send Interested/Ignored
+- **Connections** — people you've matched with
+- **Requests** — incoming requests, accept or reject
+- **Profile** — view and edit your own profile
+- **Chat** — real-time messaging with a connection, over Socket.io
+- **Premium** — Razorpay checkout for paid membership
+
+## State management
+
+Redux slices for the major pieces of data: `userSlice` (logged-in user), `feedSlice`, `connectionSlice`, `requestSlice` (incoming), and `sentRequestSlice` (outgoing). Components read from the store and dispatch actions on accept/reject/send rather than managing this locally, so the UI stays in sync across pages without prop-drilling.
+
+## Folder structure
+
 ```
-DevTinder-FrontEnd/
-├── src/
-│   ├── components/         # Reusable UI components (UserCard, NavBar, RequestItem, etc.)
-│   ├── pages/               # Page-level views (Login, Feed, Connections, Requests, Profile)
-│   ├── utils/                # Redux slices, store config, constants (baseUrl, etc.)
-│   ├── App.jsx              # Root component with route definitions
-│   └── main.jsx              # Application entry point
-├── index.html
-├── package.json
-├── vite.config.js
-└── eslint.config.js
+src/
+├── components/
+│   ├── Body.jsx
+│   ├── Chat.jsx
+│   ├── ConnectionItem.jsx
+│   ├── Connections.jsx
+│   ├── EditProfileCard.jsx
+│   ├── Footer.jsx
+│   ├── Login.jsx
+│   ├── NavBar.jsx
+│   ├── Premium.jsx
+│   ├── Profile.jsx
+│   ├── ReceivingRejectingRequest.jsx
+│   ├── RequestItem.jsx
+│   ├── SentRequestSection.jsx
+│   └── UserCards.jsx
+├── utils/
+│   ├── appStore.js          # Redux store config
+│   ├── connectionSlice.jsx
+│   ├── constants.jsx
+│   ├── feedSlice.js
+│   ├── requestSlice.jsx
+│   ├── sentRequestSlice.js
+│   ├── socket.js            # Socket.io client setup
+│   └── userSlice.js
+├── App.jsx
+├── index.css
+└── main.jsx
 ```
- 
----
- 
-## ⚙️ Getting Started
- 
-Follow these steps to run the project locally.
- 
-### Prerequisites
- 
-Make sure you have the following installed:
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- npm (comes with Node.js)
-- The [DevTinder Backend](https://github.com/ashish0jha/DevTinder) running locally or deployed
-### 1. Clone the repository
- 
+
+## Running it locally
+
 ```bash
 git clone https://github.com/ashish0jha/DevTinder-FrontEnd.git
 cd DevTinder-FrontEnd
-```
- 
-### 2. Install dependencies
- 
-```bash
 npm install
-```
- 
-### 3. Configure the backend URL
- 
-Open `src/utils/constants.js` and ensure the `baseUrl` points to your running backend:
- 
-```javascript
-export const baseUrl = "http://localhost:3000";
-```
- 
-### 4. Start the development server
- 
-```bash
 npm run dev
 ```
- 
-The app will be available at **`http://localhost:5173`**
- 
-### 5. Make sure the backend is running
- 
-This frontend depends on the DevTinder backend (Express + MongoDB) for authentication, feed data, and connection management. Without it running, API calls will fail.
- 
----
- 
-## 📜 Available Scripts
- 
-| Command | Description |
-|---|---|
-| `npm run dev` | Starts the Vite development server |
-| `npm run build` | Builds the app for production |
-| `npm run preview` | Previews the production build locally |
-| `npm run lint` | Runs ESLint to check code quality |
- 
----
- 
-## 🔑 Key Implementation Highlights
- 
-- **Cookie-based JWT auth** — Tokens are stored in `httpOnly` cookies and sent automatically via `withCredentials: true` on every Axios request, keeping tokens inaccessible to client-side JavaScript (XSS protection).
-- **Centralized state with Redux Toolkit** — User session, feed data, connections, and requests are managed through dedicated slices for predictable state updates across the app.
-- **Protected routing** — Unauthenticated users are redirected to the login page when attempting to access protected routes.
-- **Optimistic UI updates** — Actions like removing a connection or responding to a request update the Redux store immediately for a smoother user experience.
----
- 
-## 🚀 Deployment
- 
-This is a static Vite-built React app and can be deployed to any static hosting provider:
- 
+
+Make sure the backend is running first — the app expects the API to be reachable (check `src` for the base URL config and point it at your local backend if it's not already proxied).
+
+## Build
+
 ```bash
 npm run build
 ```
- 
-This generates a `dist/` folder which can be deployed to **Vercel**, **Netlify**, **AWS S3 + CloudFront**, or served via **Nginx** on an EC2 instance alongside the backend.
- 
-> ⚠️ Remember to update `CORS` origin settings on the backend to match your deployed frontend URL, and set cookies with `secure: true` and `sameSite: "None"` for cross-origin HTTPS environments.
- 
----
- 
-## 🤝 Contributing
- 
-Contributions, issues, and feature requests are welcome!
- 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
----
- 
-## 📄 License
- 
-This project is open-source and available for learning and personal use.
- 
----
- 
-## 👤 Author
- 
-**Ashish Ojha**
-- GitHub: [@ashish0jha](https://github.com/ashish0jha)
----
- 
-<p align="center">Built with ❤️ for the developer community</p>
+
+Outputs a `dist/` folder, which gets copied onto the EC2 instance and served alongside the API.
+
+## Notes
+
+- Routes are protected — no token, no access; you're bounced back to login.
+- Chat connects over a websocket only after a connection request has been accepted, not before.
+- Premium flow hits the backend to create a Razorpay order, then opens Razorpay's checkout — confirmation comes back through the backend webhook, not handled client-side.
+
+## What's next
+
+- In-app and push notifications for matches, messages, and requests
+- A smarter feed — right now it's mostly exclusion-based; want to actually rank by shared skills/interests instead of just filtering out people already swiped on
+- Search and filters on the feed (skills, experience level, tech stack)
+- Voice/video calling for matched connections, on top of the existing chat
