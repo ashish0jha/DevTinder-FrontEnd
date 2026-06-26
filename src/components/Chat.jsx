@@ -25,12 +25,19 @@ const Chat = () => {
         const chat = await axios.get(baseUrl + "/chat/" + targetUserId, { withCredentials: true });
 
         const data = chat.data.messages.map((item) => {
-            const { firstName, lastName, _id } = item.senderId;
+            const { firstName, lastName, _id} = item.senderId;
+            const msgTime = new Date(item.createdAt).toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+                timeZone: "Asia/Kolkata",
+            });
             return {
                 userId: _id,
                 firstName,
                 lastName,
                 text: item.text,
+                time:msgTime
             }
         })
         setMessages(data);
@@ -91,16 +98,7 @@ const Chat = () => {
                             key={index} 
                             className={`flex flex-col w-full max-w-[85%] sm:max-w-[70%] ${isCurrentUser ? "ml-auto items-end" : "mr-auto items-start"}`}
                         >
-                            {/* Message Header Metadata */}
-                            <div className="flex items-center gap-2 mb-1 px-1 text-[11px] text-zinc-500">
-                                <span className="font-medium text-zinc-400">
-                                    {isCurrentUser ? "You" : `${msg.firstName} ${msg.lastName}`}
-                                </span>
-                                <span>•</span>
-                                <time className="opacity-70">2 hours ago</time>
-                            </div>
                             
-                            {/* Speech Bubble Colors */}
                             <div className={`px-4 py-2.5 rounded-2xl text-sm wrap-words leading-relaxed shadow-sm
                                 ${isCurrentUser 
                                     ? "bg-blue-900 text-white rounded-tr-xs" 
@@ -108,6 +106,17 @@ const Chat = () => {
                                 }`}
                             >
                                 {msg.text}
+                            </div>
+                            <div className="flex items-center gap-2 mb-1 px-1 text-[11px] text-zinc-500">
+                                <span className="font-medium text-zinc-400">
+                                    {isCurrentUser ? "You" : `${msg.firstName} ${msg.lastName}`}
+                                </span>
+                                <span>•</span>
+                                <time className="opacity-70">{msg.time || new Date().toLocaleTimeString("en-US", {
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                })}</time>
                             </div>
                         </div>
                     )

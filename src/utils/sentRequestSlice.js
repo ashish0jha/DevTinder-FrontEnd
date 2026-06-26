@@ -8,8 +8,10 @@ const sentRequestSlice = createSlice({
             return  action.payload
         },
         removeSentRequests : (state,action)=>{
-            const newCollection = state.filter(val => val._id !== action.payload);
-            return newCollection;
+            const newList = state.filter(user =>{
+                return  user._id !== action.payload ;
+            });
+            return newList;
         }
     }
 })
